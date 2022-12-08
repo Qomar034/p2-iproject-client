@@ -5,8 +5,8 @@ import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({ 
-    baseUrl: 'http://localhost:3000/',
-    // baseUrl: 'https://restaurant-api-production-d70c.up.railway.app/',
+    // baseUrl: 'http://localhost:3000/',
+    baseUrl: 'https://ipservermarqofy-production.up.railway.app/',
     // frontUrl: 'http://localhost:8080/',
     frontUrl: 'https://restaurant-api-6e10a.web.app/',
 
