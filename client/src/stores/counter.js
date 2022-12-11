@@ -5,10 +5,10 @@ import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({ 
-    // baseUrl: 'http://localhost:3000/',
-    baseUrl: 'https://ipservermarqofy-production.up.railway.app/',
-    // frontUrl: 'http://localhost:8080/',
-    frontUrl: 'https://restaurant-api-6e10a.web.app/',
+    baseUrl: 'http://localhost:3000/',
+    // baseUrl: 'https://ipservermarqofy-production.up.railway.app/',
+    frontUrl: 'http://localhost:8080/',
+    // frontUrl: 'https://restaurant-api-6e10a.web.app/',
 
     loginState: false,
     login: {
@@ -141,7 +141,7 @@ export const useCounterStore = defineStore('counter', {
           },
           headers: { access_token: localStorage.access_token }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `${this.member.register.name} succesfully registered`,
@@ -244,7 +244,7 @@ export const useCounterStore = defineStore('counter', {
             role: this.register.role,
           }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `${this.register.fullName} succesfully registered`,
@@ -293,6 +293,8 @@ export const useCounterStore = defineStore('counter', {
 
     async postCart(value){
       try {
+        if (!this.calledTransaction.id) await this.openTransaction()
+        
         await axios ({
           url: this.baseUrl + 'carts',
           method: 'post',
@@ -305,15 +307,14 @@ export const useCounterStore = defineStore('counter', {
           },
           headers: { access_token: localStorage.access_token }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `Cart succesfully added`,
           showConfirmButton: false,
           timer: 1500
         })
-
-        this.getCarts()
+        // this.getCarts()
       } catch (error) {
         console.log(error);
         Swal.fire({
@@ -331,7 +332,7 @@ export const useCounterStore = defineStore('counter', {
           method: 'get',
           headers: { access_token: localStorage.access_token }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `Transaction ${data.status}`,
@@ -370,7 +371,7 @@ export const useCounterStore = defineStore('counter', {
           },
           headers: { access_token: localStorage.access_token }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `Transactions Closed`,
@@ -393,5 +394,7 @@ export const useCounterStore = defineStore('counter', {
         })
       }
     },
+
+    
   },
 })

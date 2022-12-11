@@ -135,8 +135,8 @@ export default {
                     </div>
                     <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-9">
                       <h4 class="text-white font-semibold">Transaction:</h4>
-                      <h4 v-if="!calledTransaction" class="text-white font-extrabold mb-0">Closed</h4>
-                      <h4 v-else class="text-white font-extrabold mb-0">{{calledTransaction.status}}</h4>
+                      <h4 v-if="!calledTransaction.status" class="text-white font-extrabold mb-0">No Transaction</h4>
+                      <h4 v-else class="text-white font-extrabold mb-0">{{calledTransaction.status}}, ID {{calledTransaction.id}}</h4>
                     </div>
                   </div>
                 </div>
