@@ -25,7 +25,8 @@ export const useCounterStore = defineStore('counter', {
 
     calledCarts: {
       items: [],
-      length: 0
+      length: 0,
+      value: 0
     },
 
     calledCategories: {
@@ -279,6 +280,12 @@ export const useCounterStore = defineStore('counter', {
           headers: { access_token: localStorage.access_token }
         })
         this.calledCarts.items = data
+
+        let totalValue = 0
+        data.forEach(el => {
+          totalValue += el.value
+        })
+        this.calledCarts.value = totalValue
       } catch (error) {
         console.log(error);
         if (error.response.data.message){

@@ -198,8 +198,8 @@ export default {
                                           <th>No</th>
                                           <th>Name</th>
                                           <th>@</th>
-                                          <th>Price</th>
-                                          <th>Sub Total</th>
+                                          <th>Price (Rp)</th>
+                                          <th>Sub Total (Rp)</th>
                                           <th>Actions</th>
                                         </tr>
                                       </thead>
@@ -208,12 +208,20 @@ export default {
                                           <td>{{++i}}</td>
                                           <td class="text-bold-500">{{item.Product.name}}</td>
                                           <td class="text-bold-500">{{item.amount}}</td>
-                                          <td class="text-bold-500">{{item.Product.price}}</td>
-                                          <td class="text-bold-500">{{item.value}}</td>
+                                          <td class="text-bold-500 text-right" style="text-align: right;">{{item.Product.price}}</td>
+                                          <td class="text-bold-500 text-right" style="text-align: right;">{{item.value}}</td>
                                           <td class="text-bold-500">
                                             <button><i class="bi bi-check-lg"></i></button>
                                             <button><i class="bi bi-trash3-fill"></i></button>
                                           </td>
+                                        </tr>
+                                        <tr>
+                                          <td>Total</td>
+                                          <td></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td style="text-align: right;" >{{calledCarts.value}}</td>
+                                          <td></td>
                                         </tr>
                                       </tbody>
                                     </table>
