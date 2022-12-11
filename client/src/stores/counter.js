@@ -5,10 +5,10 @@ import Swal from 'sweetalert2'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({ 
-    // baseUrl: 'http://localhost:3000/',
-    baseUrl: 'https://ipservermarqofy-production.up.railway.app/',
-    // frontUrl: 'http://localhost:8080/',
-    frontUrl: 'https://restaurant-api-6e10a.web.app/',
+    baseUrl: 'http://localhost:3000/',
+    // baseUrl: 'https://ipservermarqofy-production.up.railway.app/',
+    frontUrl: 'http://localhost:8080/',
+    // frontUrl: 'https://restaurant-api-6e10a.web.app/',
 
     loginState: false,
     login: {
@@ -24,7 +24,7 @@ export const useCounterStore = defineStore('counter', {
     },
 
     calledCarts: {
-      item: [],
+      items: [],
       length: 0
     },
 
@@ -141,7 +141,7 @@ export const useCounterStore = defineStore('counter', {
           },
           headers: { access_token: localStorage.access_token }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `${this.member.register.name} succesfully registered`,
@@ -244,7 +244,7 @@ export const useCounterStore = defineStore('counter', {
             role: this.register.role,
           }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `${this.register.fullName} succesfully registered`,
@@ -274,25 +274,27 @@ export const useCounterStore = defineStore('counter', {
     async getCarts(){
       try {
         let {data} = await axios ({
-          url: this.baseUrl + 'carts' + `${this.calledTransaction.id}`,
+          url: this.baseUrl + 'carts/' + `${this.calledTransaction.id}`,
           method: 'get',
           headers: { access_token: localStorage.access_token }
         })
-        
-        console.log(data);
-        this.calledCarts.item = data
+        this.calledCarts.items = data
       } catch (error) {
         console.log(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: `${error.response.data.message}`,
-        })
+        if (error.response.data.message){
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `${error.response.data.message}`,
+          })
+        }
       }
     },
 
     async postCart(value){
       try {
+        if (!this.calledTransaction.id) await this.openTransaction()
+        
         await axios ({
           url: this.baseUrl + 'carts',
           method: 'post',
@@ -305,15 +307,14 @@ export const useCounterStore = defineStore('counter', {
           },
           headers: { access_token: localStorage.access_token }
         })
-        Swal.fire({
+        await this.getCarts()
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
-          title: `Cart succesfully added`,
+          title: `Cart updated!`,
           showConfirmButton: false,
           timer: 1500
         })
-
-        this.getCarts()
       } catch (error) {
         console.log(error);
         Swal.fire({
@@ -331,7 +332,7 @@ export const useCounterStore = defineStore('counter', {
           method: 'get',
           headers: { access_token: localStorage.access_token }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `Transaction ${data.status}`,
@@ -339,7 +340,6 @@ export const useCounterStore = defineStore('counter', {
           timer: 1500
         })
 
-        console.log(data);
         this.calledTransaction.id = data.id
         this.calledTransaction.reportId = data.reportId
         this.calledTransaction.cashierId = data.cashierId
@@ -348,13 +348,16 @@ export const useCounterStore = defineStore('counter', {
         this.calledTransaction.point = data.point
         this.calledTransaction.status = data.status
         
+        await this.getCarts()
       } catch (error) {
         console.log(error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: `${error.response.data.message}`,
-        })
+        if (error.response.data.message){
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: `${error.response.data.message}`,
+          })
+        }
       }
     },
 
@@ -370,7 +373,7 @@ export const useCounterStore = defineStore('counter', {
           },
           headers: { access_token: localStorage.access_token }
         })
-        Swal.fire({
+        await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: `Transactions Closed`,
@@ -393,5 +396,7 @@ export const useCounterStore = defineStore('counter', {
         })
       }
     },
+
+    
   },
 })

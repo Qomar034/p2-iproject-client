@@ -1,12 +1,14 @@
 <script>
 import { mapActions, mapState, mapWritableState } from 'pinia';
 import { useCounterStore } from '../stores/counter';
+import Swal from 'sweetalert2'
+
 
 export default{
   data(){
     return {
       productId: this.product.id,
-      amount:'',
+      amount:0,
       price:this.product.price,
     }
   },
@@ -18,13 +20,33 @@ export default{
   },
   methods: {
     ...mapActions(useCounterStore, ['postCart']),
-    handlePostCart(){
-      let value = {
-        productId: this.productId,
-        amount:this.amount,
-        price: this.price,
+    async handlePostCart(){
+      try {
+        if (!this.amount) {
+          Swal.fire({
+            icon: 'error',
+            text: 'Please input the amount!',
+          })
+        }
+        else if (this.amount > 0) {
+          let value = {
+            productId: this.productId,
+            amount: this.amount,
+            price: this.price,
+          }
+          await this.postCart(value)
+          this.amount = 0
+        } 
+        else {
+          Swal.fire({
+            icon: 'error',
+            text: 'Please input the proper amount!',
+          })
+        }
+      } catch (error) {
+        
       }
-      this.postCart(value)
+      
     }
   },
   props: ['product'],
