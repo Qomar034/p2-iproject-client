@@ -18,7 +18,7 @@ export default {
   computed: {
     ...mapState(useCounterStore, []),
     ...mapWritableState(useCounterStore, ['loggedUser', 'calledProducts', 'pageCount', 'pageNumber', 'calledCategories', 'searchInput', 'filterCode',
-  'calledTransaction'])
+  'calledTransaction', 'calledCarts'])
   },
   methods: {
     ...mapActions(useCounterStore, ['handleAuthentication', 'fetchProducts', 'movePage', 'fetchCategories', 'openTransaction', 'closeTransaction'])
@@ -197,18 +197,19 @@ export default {
                                         <tr>
                                           <th>No</th>
                                           <th>Name</th>
-                                          <th>Amount</th>
+                                          <th>@</th>
                                           <th>Price</th>
+                                          <th>Sub Total</th>
                                           <th>Actions</th>
                                         </tr>
                                       </thead>
                                       <tbody>
-                                        <tr>
-                                          <td>2</td>
-                                          <td class="text-bold-500">Michael Right</td>
-                                          <td class="text-bold-500">Graphic concepts</td>
-                                          <td class="text-bold-500">
-                                            </td>
+                                        <tr v-for="(item, i) of calledCarts.items" :key="item.id">
+                                          <td>{{++i}}</td>
+                                          <td class="text-bold-500">{{item.Product.name}}</td>
+                                          <td class="text-bold-500">{{item.amount}}</td>
+                                          <td class="text-bold-500">{{item.Product.price}}</td>
+                                          <td class="text-bold-500">{{item.value}}</td>
                                           <td class="text-bold-500">
                                             <button><i class="bi bi-check-lg"></i></button>
                                             <button><i class="bi bi-trash3-fill"></i></button>

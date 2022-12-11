@@ -20,23 +20,33 @@ export default{
   },
   methods: {
     ...mapActions(useCounterStore, ['postCart']),
-    handlePostCart(){
-      if (!this.amount){
-        Swal.fire({
+    async handlePostCart(){
+      try {
+        if (!this.amount) {
+          Swal.fire({
             icon: 'error',
             text: 'Please input the amount!',
           })
-      }
-      if (this.amount > 0){
-        let value = {
-          productId: this.productId,
-          amount:this.amount,
-          price: this.price,
         }
-        setTimeout(() => {
-          this.postCart(value)
-        }, 1500)
+        else if (this.amount > 0) {
+          let value = {
+            productId: this.productId,
+            amount: this.amount,
+            price: this.price,
+          }
+          await this.postCart(value)
+          this.amount = 0
+        } 
+        else {
+          Swal.fire({
+            icon: 'error',
+            text: 'Please input the proper amount!',
+          })
+        }
+      } catch (error) {
+        
       }
+      
     }
   },
   props: ['product'],
